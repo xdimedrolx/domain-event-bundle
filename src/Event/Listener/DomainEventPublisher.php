@@ -44,7 +44,7 @@ class DomainEventPublisher implements EventSubscriber
      * @param EventBus    $bus
      * @param bool        $enable
      */
-    public function __construct(EventPuller $puller, EventBus $bus, $enable)
+    public function __construct(EventPuller $puller, EventBus $bus, bool $enable)
     {
         $this->bus = $bus;
         $this->puller = $puller;
@@ -54,7 +54,7 @@ class DomainEventPublisher implements EventSubscriber
     /**
      * @return array
      */
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         if (!$this->enable) {
             return [];
@@ -69,19 +69,19 @@ class DomainEventPublisher implements EventSubscriber
     /**
      * @param OnFlushEventArgs $args
      */
-    public function onFlush(OnFlushEventArgs $args)
+    public function onFlush(OnFlushEventArgs $args): void
     {
         // aggregate events from deleted entities
-        $this->events = $this->puller->pull($args->getEntityManager()->getUnitOfWork());
+        $this->events = $this->puller->pull($args->getObjectManager()->getUnitOfWork());
     }
 
     /**
      * @param PostFlushEventArgs $args
      */
-    public function postFlush(PostFlushEventArgs $args)
+    public function postFlush(PostFlushEventArgs $args): void
     {
         // aggregate PreRemove/PostRemove events
-        $events = array_merge($this->events, $this->puller->pull($args->getEntityManager()->getUnitOfWork()));
+        $events = array_merge($this->events, $this->puller->pull($args->getObjectManager()->getUnitOfWork()));
 
         // clear aggregate events before publish it
         // it necessary for fix recursive publish of events
@@ -94,7 +94,7 @@ class DomainEventPublisher implements EventSubscriber
                 $this->bus->publish($event);
             }
 
-            $args->getEntityManager()->flush();
+            $args->getObjectManager()->flush();
         }
     }
 }

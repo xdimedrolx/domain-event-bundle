@@ -23,7 +23,7 @@ class GpsLabDomainEventExtension extends Extension
      * @param array            $configs
      * @param ContainerBuilder $container
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('queue.yml');
@@ -56,7 +56,7 @@ class GpsLabDomainEventExtension extends Extension
      *
      * @return string
      */
-    private function busRealName($name)
+    private function busRealName(string $name): string
     {
         if (in_array($name, ['listener_located', 'queue'])) {
             return 'domain_event.bus.'.$name;
@@ -70,7 +70,7 @@ class GpsLabDomainEventExtension extends Extension
      *
      * @return string
      */
-    private function queueRealName($name)
+    private function queueRealName(string $name): string
     {
         if (in_array($name, ['pull_memory', 'subscribe_executing'])) {
             return 'domain_event.queue.'.$name;
@@ -84,7 +84,7 @@ class GpsLabDomainEventExtension extends Extension
      *
      * @return string
      */
-    private function locatorRealName($name)
+    private function locatorRealName(string $name): string
     {
         if (in_array($name, ['direct_binding', 'container', 'symfony'])) {
             return 'domain_event.locator.'.$name;
@@ -96,7 +96,7 @@ class GpsLabDomainEventExtension extends Extension
     /**
      * @return string
      */
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'gpslab_domain_event';
     }

@@ -18,7 +18,7 @@ class EventListenerPass implements CompilerPassInterface
     /**
      * @param ContainerBuilder $container
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->has('domain_event.locator')) {
             return;
@@ -38,7 +38,7 @@ class EventListenerPass implements CompilerPassInterface
      * @param ContainerBuilder $container
      * @param Definition       $current_locator
      */
-    private function registerListeners(ContainerBuilder $container, Definition $current_locator)
+    private function registerListeners(ContainerBuilder $container, Definition $current_locator): void
     {
         foreach ($container->findTaggedServiceIds('domain_event.listener') as $id => $attributes) {
             foreach ($attributes as $attribute) {
@@ -52,7 +52,7 @@ class EventListenerPass implements CompilerPassInterface
      * @param ContainerBuilder $container
      * @param Definition       $current_locator
      */
-    private function registerSubscribers(ContainerBuilder $container, Definition $current_locator)
+    private function registerSubscribers(ContainerBuilder $container, Definition $current_locator): void
     {
         foreach ($container->findTaggedServiceIds('domain_event.subscriber') as $id => $attributes) {
             $subscriber = $container->findDefinition($id);

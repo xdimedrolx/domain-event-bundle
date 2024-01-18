@@ -22,20 +22,20 @@ class EventPuller
      *
      * @return Event[]
      */
-    public function pull(UnitOfWork $uow)
+    public function pull(UnitOfWork $uow): array
     {
         $events = [];
 
-        $events = array_merge($events, $this->pullFromEntities($uow->getScheduledEntityDeletions()));
-        $events = array_merge($events, $this->pullFromEntities($uow->getScheduledEntityInsertions()));
-        $events = array_merge($events, $this->pullFromEntities($uow->getScheduledEntityUpdates()));
+        $events[] = $this->pullFromEntities($uow->getScheduledEntityDeletions());
+        $events[] = $this->pullFromEntities($uow->getScheduledEntityInsertions());
+        $events[] = $this->pullFromEntities($uow->getScheduledEntityUpdates());
 
         // other entities
         foreach ($uow->getIdentityMap() as $entities) {
-            $events = array_merge($events, $this->pullFromEntities($entities));
+            $events[] = $this->pullFromEntities($entities);
         }
 
-        return $events;
+        return array_merge(...$events);
     }
 
     /**
@@ -43,7 +43,7 @@ class EventPuller
      *
      * @return Event[]
      */
-    private function pullFromEntities(array $entities)
+    private function pullFromEntities(array $entities): array
     {
         $events = [];
 
@@ -58,10 +58,10 @@ class EventPuller
             }
 
             if ($entity instanceof AggregateEvents) {
-                $events = array_merge($events, $entity->pullEvents());
+                $events[] = $entity->pullEvents();
             }
         }
 
-        return $events;
+        return array_merge(...$events);
     }
 }

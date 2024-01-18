@@ -10,6 +10,7 @@
 namespace GpsLab\Bundle\DomainEvent\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -27,7 +28,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return TreeBuilder
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $tree_builder = $this->createTreeBuilder('gpslab_domain_event');
         $root = $this->getRootNode($tree_builder, 'gpslab_domain_event');
@@ -52,7 +53,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return TreeBuilder
      */
-    private function createTreeBuilder($name)
+    private function createTreeBuilder($name): TreeBuilder
     {
         // Symfony 4.2 +
         if (method_exists(TreeBuilder::class, '__construct')) {
@@ -69,7 +70,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return ArrayNodeDefinition
      */
-    private function getRootNode(TreeBuilder $tree_builder, $name)
+    private function getRootNode(TreeBuilder $tree_builder, $name): ArrayNodeDefinition|NodeDefinition
     {
         if (method_exists($tree_builder, 'getRootNode')) {
             // Symfony 4.2 +
